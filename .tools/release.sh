@@ -8,16 +8,20 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
   echo "Releasing $VERSION ..."
 
-  # test
+  # lint
   npm run lint
 
   # test
-  npm run test
+  npm test
 
   # build
   rm -rf dist
   mkdir dist
   npm run build
+
+  # test build
+  npm run test:cjs
+  npm run test:iife
 
   # commit
   git add -A
