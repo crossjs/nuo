@@ -1,0 +1,9 @@
+language: node_js
+
+node_js:
+  - "5"
+
+after_success:
+  - npm run coverage
+  - npm i coveralls
+  - cat ./coverage/*/lcov.info | coveralls

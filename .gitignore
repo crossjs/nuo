@@ -1,0 +1,9 @@
+.DS_STORE
+*.bak
+*.log
+*.old
+*.out
+
+coverage
+dist
+node_modules
