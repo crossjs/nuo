@@ -21,7 +21,9 @@ IE8+, Chrome, Firefox, IOS 4+, Safari 5+, Opera
 ## Usage
 
 ```js
-new Nuo(function(resolve, reject, notify) {
+import Promise from 'nuo'
+
+new Promise(function(resolve, reject, notify) {
   // resolve, reject, notify
 }).then(function(value) {
   // do something
@@ -36,7 +38,7 @@ new Nuo(function(resolve, reject, notify) {
 
 ### cjs
 
-``` bash
+```bash
 $ npm install nuo
 ```
 
