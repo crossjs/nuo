@@ -1,5 +1,5 @@
 /*!
- * NUO v0.0.1
+ * NUO v0.0.2
  * (c) 2016 crossjs
  * Released under the MIT License.
  */
@@ -194,6 +194,9 @@ var nuo = (function () {
     attachTo.setImmediate = setImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? undefined : global : self));
+
+// override
+global.Promise = Nuo;
 
 function Nuo (fn) {
   var this$1 = this;
