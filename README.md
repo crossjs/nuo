@@ -1,6 +1,4 @@
-诺（諾）nuò <a href="http://promises-aplus.github.com/promises-spec"><img src="http://promises-aplus.github.com/promises-spec/assets/logo-small.png" align="right" alt="Promises/A+ logo" /></a>
-
-# NUO
+# 诺（諾）nuò
 
 > :two_hearts: Lightweight ES6 Promise polyfill for the browser and node. Adheres closely to the spec. It is a perfect polyfill IE, Firefox or any other browser that does not support native promises.
 
@@ -23,18 +21,20 @@ IE8+, Chrome, Firefox, IOS 4+, Safari 5+, Opera
 ```js
 import Promise from 'nuo'
 
-new Promise(function(resolve, reject, notify) {
+new Promise((resolve, reject, notify) => {
   // resolve, reject, notify
-}).then(function(value) {
+}).then(value => {
   // do something
-}).catch(function(error) {
+}).catch(error => {
   // do something
-}).progress(function(value) {
+}).progress(value => {
   // do something
-}).finally(function() {
+}).finally(() => {
   // do something
 })
 ```
+
+**warning: the non-standard progress and finally are NOT recommended to use, though they are working fine.**
 
 ### cjs
 
@@ -45,25 +45,6 @@ $ npm install nuo
 ### iife
 
 - [nuo](index.js) [minified](index.min.js)
-
-## Example
-
-```js
-const nuo = new Nuo(function(resolve, reject) {
-  // do a thing, possibly async, then…
-
-  if (/* everything turned out fine */) {
-    resolve("Stuff worked!");
-  }  else {
-    reject(new Error("It broke"));
-  }
-});
-
-// Do something when async done
-nuo.then(function() {
-  ...
-});
-```
 
 ## Testing
 
