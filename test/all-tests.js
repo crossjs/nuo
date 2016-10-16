@@ -1,4 +1,4 @@
-import assert from 'better-assert'
+import assert from 'assert'
 import Promise from '../src'
 
 const a = { _id: 'a' }

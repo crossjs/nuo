@@ -1,15 +1,12 @@
 import 'setimmediate'
 
-// override
-global.Promise = Nuo
-
 function Nuo (fn) {
   if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
-  if (typeof fn !== 'function') throw new TypeError('not a function')
-  this._state = null
-  this._value = null
-  this._progress = null
-  this._deferreds = []
+  if (typeof fn !== 'function') throw new TypeError('The first argument must be a function')
+  this._s = null
+  this._v = null
+  this._p = null
+  this._d = []
 
   doResolve(fn, (...args) => {
     resolve.apply(this, args)
@@ -21,12 +18,12 @@ function Nuo (fn) {
 }
 
 function handle (deferred) {
-  if (this._state === null) {
-    this._deferreds.push(deferred)
+  if (this._s === null) {
+    this._d.push(deferred)
     if (deferred.onProgress) {
-      if (this._progress !== null) {
+      if (this._p !== null) {
         setImmediate(() => {
-          deferred.onProgress(this._progress)
+          deferred.onProgress(this._p)
         })
       }
     }
@@ -34,14 +31,14 @@ function handle (deferred) {
   }
 
   setImmediate(() => {
-    const cb = this._state ? deferred.onFulfilled : deferred.onRejected
+    const cb = this._s ? deferred.onFulfilled : deferred.onRejected
     if (cb === null) {
-      (this._state ? deferred.resolve : deferred.reject)(this._value)
+      (this._s ? deferred.resolve : deferred.reject)(this._v)
       return
     }
     let ret
     try {
-      ret = cb(this._value)
+      ret = cb(this._v)
     } catch (e) {
       deferred.reject(e)
       return
@@ -73,8 +70,8 @@ function resolve (newValue) {
       }
     }
 
-    this._state = true
-    this._value = newValue
+    this._s = true
+    this._v = newValue
     finale.call(this)
   } catch (e) {
     reject.call(this, e)
@@ -82,22 +79,22 @@ function resolve (newValue) {
 }
 
 function reject (newValue) {
-  this._state = false
-  this._value = newValue
+  this._s = false
+  this._v = newValue
   finale.call(this)
 }
 
 function notify (progress) {
-  this._progress = progress
+  this._p = progress
   finale.call(this, true)
 }
 
 function finale (keep) {
-  for (let i = 0, len = this._deferreds.length; i < len; i++) {
-    handle.call(this, this._deferreds[i])
+  for (let i = 0, len = this._d.length; i < len; i++) {
+    handle.call(this, this._d[i])
   }
   if (!keep) {
-    this._deferreds = null
+    this._d = null
   }
 }
 
@@ -209,5 +206,10 @@ Nuo.race = values => {
     }
   })
 }
+
+;(function (global) {
+  // override
+  global.Promise = Nuo
+}(typeof self === 'undefined' ? typeof global === 'undefined' ? this : global : self))
 
 export default Nuo
