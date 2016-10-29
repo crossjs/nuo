@@ -207,9 +207,9 @@ Nuo.race = values => {
   })
 }
 
+export default Nuo
+
 ;(function (global) {
   // override
   global.Promise = Nuo
-}(typeof self === 'undefined' ? typeof global === 'undefined' ? this : global : self))
-
-export default Nuo
+}(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {}))

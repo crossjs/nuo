@@ -17,7 +17,7 @@ then
   # build
   rm -rf dist
   mkdir dist
-  npm run build
+  VERSION=$VERSION npm run build
 
   # test build
   npm run test:cjs
@@ -25,8 +25,8 @@ then
 
   # commit
   git add -A
-  git commit -m "* :tada: build $VERSION"
-  npm version $VERSION --message "* :bookmark: bump $VERSION"
+  git commit -m "[build] $VERSION"
+  npm version $VERSION --message "[bump] $VERSION"
 
   # publish
   git push

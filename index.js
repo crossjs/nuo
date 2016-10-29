@@ -1,5 +1,5 @@
 /*!
- * NUO v0.1.0
+ * NUO v0.1.2
  * (c) 2016 crossjs
  * Released under the MIT License.
  */
@@ -431,12 +431,12 @@ Nuo.race = function (values) {
       Nuo.resolve(values[i]).then(resolve, reject, notify);
     }
   })
-}
+};
 
-;(function (global) {
+(function (global) {
   // override
   global.Promise = Nuo;
-}(typeof self === 'undefined' ? typeof global === 'undefined' ? undefined : global : self));
+}(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {}));
 
 return Nuo;
 

@@ -1,5 +1,3 @@
-process.env.BABEL_ENV = 'production'
-
 var fs = require('fs')
 var rollup = require('rollup')
 var uglify = require('uglify-js')
