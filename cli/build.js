@@ -1,7 +1,6 @@
 var fs = require('fs')
 var rollup = require('rollup')
 var uglify = require('uglify-js')
-var nodeResolve = require('rollup-plugin-node-resolve')
 var buble = require('rollup-plugin-buble')
 var version = process.env.VERSION || require('../package.json').version
 
@@ -36,38 +35,6 @@ rollup.rollup({
     }
   }).code
   return write('dist/index.min.js', minified)
-})
-.catch(logError)
-
-// iife
-rollup.rollup({
-  entry: 'src/index.js',
-  plugins: [
-    nodeResolve({
-      jsnext: true,
-      browser: true
-    }),
-    buble()
-  ]
-})
-.then(function (bundle) {
-  var code = bundle.generate({
-    format: 'iife',
-    moduleName: 'nuo',
-    banner
-  }).code
-  return write('index.js', code).then(function () {
-    return code
-  })
-})
-.then(function (code) {
-  var minified = banner + '\n' + uglify.minify(code, {
-    fromString: true,
-    output: {
-      ascii_only: true
-    }
-  }).code
-  return write('index.min.js', minified)
 })
 .catch(logError)
 

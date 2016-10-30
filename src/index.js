@@ -1,4 +1,4 @@
-import 'setimmediate'
+const setImmediate = require('core-js/library/fn/set-immediate')
 
 function Nuo (fn) {
   if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
@@ -208,8 +208,3 @@ Nuo.race = values => {
 }
 
 export default Nuo
-
-;(function (global) {
-  // override
-  global.Promise = Nuo
-}(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {}))

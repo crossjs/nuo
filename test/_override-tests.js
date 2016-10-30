@@ -5,9 +5,8 @@ global.Promise = {
 const assert = require('assert')
 require('../src')
 
-describe('Override global', () => {
-  it('should override global Promise', () => {
-    assert(global.Promise.fakePromise === undefined)
-    assert(global.Promise.name === 'Nuo')
+describe('Global overridding', () => {
+  it('should NOT override global Promise', () => {
+    assert(global.Promise.fakePromise === true)
   })
 })

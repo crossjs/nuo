@@ -12,11 +12,19 @@ This implementation is based on [taylorhakes/promise-polyfill](https://github.co
 
 For API information about Promises, please check out this article [HTML5Rocks article](http://www.html5rocks.com/en/tutorials/es6/promises/).
 
+## Changelog
+
+**1.0.0**: global promise is NOT overridden by default
+
 ## Browser Support
 
 IE8+, Chrome, Firefox, IOS 4+, Safari 5+, Opera
 
 ## Usage
+
+```bash
+$ npm install nuo --save
+```
 
 ```js
 import Promise from 'nuo'
@@ -35,16 +43,6 @@ new Promise((resolve, reject, notify) => {
 ```
 
 **warning: the non-standard progress and finally are NOT recommended to use, though they are working fine.**
-
-### cjs
-
-```bash
-$ npm install nuo
-```
-
-### iife
-
-- [nuo](index.js) [minified](index.min.js)
 
 ## Testing
 

@@ -21,7 +21,6 @@ then
 
   # test build
   npm run test:cjs
-  npm run test:iife
 
   # commit
   git add -A
