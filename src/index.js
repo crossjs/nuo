@@ -3,9 +3,13 @@ const setImmediate = require('core-js/library/fn/set-immediate')
 function Nuo (fn) {
   if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
   if (typeof fn !== 'function') throw new TypeError('The first argument must be a function')
+  // state
   this._s = null
+  // value
   this._v = null
+  // progress
   this._p = null
+  // deferred
   this._d = []
 
   doResolve(fn, (...args) => {
