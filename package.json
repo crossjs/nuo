@@ -1,9 +1,13 @@
 {
   "name": "nuo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": ":two_hearts: Lightweight promise polyfill. A+ compliant. Implements notify, progress, and finally.",
   "main": "dist/index.js",
-  "jsnext:main": "src/index.js",
+  "module": "src/index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
   "scripts": {
     "build": "node --harmony ./cli/build",
     "lint": "eslint --max-warnings 10 .",
@@ -20,7 +24,7 @@
   "keywords": [
     "promise",
     "promise-polyfill",
-    "ES6",
+    "ES2015",
     "promises-aplus",
     "notify",
     "progress",
