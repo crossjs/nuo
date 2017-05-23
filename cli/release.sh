@@ -26,7 +26,7 @@ then
   # commit
   git add -A
   git commit -m "[build] $VERSION"
-  npm version $VERSION --message "[bump] $VERSION"
+  # npm version $VERSION --message "[bump] $VERSION"
 
   # publish
   git push
