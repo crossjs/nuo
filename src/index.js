@@ -139,11 +139,11 @@ function doResolve (fn, onFulfilled, onRejected, onProgress) {
   }
 }
 
-Nuo.prototype.catch = function (onRejected) {
+Nuo.prototype['catch'] = function (onRejected) {
   return this.then(null, onRejected)
 }
 
-Nuo.prototype.finally = function (done) {
+Nuo.prototype['finally'] = function (done) {
   return this.then(value => Nuo.resolve(done()).then(() => {
     return value
   }), reason => Nuo.resolve(done()).then(() => {
