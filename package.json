@@ -3,7 +3,6 @@
   "version": "1.0.2",
   "description": ":two_hearts: Lightweight promise polyfill. A+ compliant. Implements notify, progress, and finally.",
   "main": "dist/index.js",
-  "module": "src/index.js",
   "files": [
     "src",
     "dist"
