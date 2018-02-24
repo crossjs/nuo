@@ -14,7 +14,7 @@ For API information about Promises, please check out this article [HTML5Rocks ar
 
 ## Changelog
 
-**1.0.0**: global promise is NOT overridden by default
+**1.0.0**: global promise does NOT override by default
 
 ## Browser Support
 
