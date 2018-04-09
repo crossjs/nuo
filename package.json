@@ -1,6 +1,6 @@
 {
   "name": "nuo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": ":two_hearts: Lightweight promise polyfill. A+ compliant. Implements notify, progress, and finally.",
   "main": "dist/index.js",
   "module": "src/index.js",
