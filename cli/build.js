@@ -13,23 +13,24 @@ var banner =
 
 // cjs
 rollup.rollup({
-  entry: 'src/index.js',
+  input: 'src/index.js',
   plugins: [
     buble()
   ]
 })
 .then(function (bundle) {
-  var code = bundle.generate({
+  return bundle.generate({
     format: 'cjs',
     banner
-  }).code
+  })
+})
+.then(function ({ code }) {
   return write('dist/index.js', code).then(function () {
     return code
   })
 })
 .then(function (code) {
   var minified = banner + '\n' + uglify.minify(code, {
-    fromString: true,
     output: {
       ascii_only: true
     }

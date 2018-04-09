@@ -1,8 +1,8 @@
 const setImmediate = require('core-js/library/fn/set-immediate')
 
 function Nuo (fn) {
-  if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new')
-  if (typeof fn !== 'function') throw new TypeError('The first argument must be a function')
+  if (!isNuo(this)) throw new TypeError('Promises must be constructed via new')
+  if (!isFunction(fn)) throw new TypeError('The first argument must be a function')
   // state
   this._s = null
   // value
@@ -12,13 +12,11 @@ function Nuo (fn) {
   // deferred
   this._d = []
 
-  doResolve(fn, (...args) => {
-    resolve.apply(this, args)
-  }, (...args) => {
-    reject.apply(this, args)
-  }, (...args) => {
-    notify.apply(this, args)
-  })
+  doResolve(
+    fn,
+    value => resolve.call(this, value),
+    reason => reject.call(this, reason),
+    progress => notify.call(this, progress))
 }
 
 function handle (deferred) {
@@ -58,18 +56,17 @@ function resolve (newValue) {
       throw new TypeError('A promise cannot be resolved with itself.')
     }
 
-    if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+    if (newValue && (isObject(newValue) || isFunction(newValue))) {
       const then = newValue.then
-      if (typeof then === 'function') {
-        doResolve((...args) => {
-          then.apply(newValue, args)
-        }, (...args) => {
-          resolve.apply(this, args)
-        }, (...args) => {
-          reject.apply(this, args)
-        }, (...args) => {
-          notify.apply(this, args)
-        })
+      if (isFunction(then)) {
+        const fn = (resolve, reject, notify) => {
+          then.call(newValue, resolve, reject, notify)
+        }
+        doResolve(
+          fn,
+          value => resolve.call(this, value),
+          reason => reject.call(this, reason),
+          progress => notify.call(this, progress))
         return
       }
     }
@@ -94,8 +91,8 @@ function notify (progress) {
 }
 
 function finale (keep) {
-  for (let i = 0, len = this._d.length; i < len; i++) {
-    handle.call(this, this._d[i])
+  for (let i = 0, d = this._d, len = d.length; i < len; i++) {
+    handle.call(this, d[i])
   }
   if (!keep) {
     this._d = null
@@ -103,9 +100,9 @@ function finale (keep) {
 }
 
 function Handler (onFulfilled, onRejected, onProgress, resolve, reject, notify) {
-  this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null
-  this.onRejected = typeof onRejected === 'function' ? onRejected : null
-  this.onProgress = typeof onProgress === 'function' ? onProgress : null
+  this.onFulfilled = isFunction(onFulfilled) ? onFulfilled : null
+  this.onRejected = isFunction(onRejected) ? onRejected : null
+  this.onProgress = isFunction(onProgress) ? onProgress : null
   this.resolve = resolve
   this.reject = reject
   this.notify = notify
@@ -144,11 +141,11 @@ Nuo.prototype['catch'] = function (onRejected) {
 }
 
 Nuo.prototype['finally'] = function (done) {
-  return this.then(value => Nuo.resolve(done()).then(() => {
-    return value
-  }), reason => Nuo.resolve(done()).then(() => {
-    throw reason
-  }))
+  return this.then(
+    value => Nuo.resolve(done()).then(() => value),
+    reason => Nuo.resolve(done()).then(() => {
+      throw reason
+    }))
 }
 
 Nuo.prototype.progress = function (onProgress) {
@@ -162,7 +159,7 @@ Nuo.prototype.then = function (onFulfilled, onRejected, onProgress) {
 }
 
 Nuo.resolve = value => {
-  if (value && typeof value === 'object' && value.constructor === Nuo) {
+  if (value && isNuo(value)) {
     return value
   }
 
@@ -180,9 +177,9 @@ Nuo.all = values => {
 
     function res (i, val) {
       try {
-        if (val && (typeof val === 'object' || typeof val === 'function')) {
+        if (val && (isObject(val) || isFunction(val))) {
           const then = val.then
-          if (typeof then === 'function') {
+          if (isFunction(then)) {
             then.call(val, val => {
               res(i, val)
             }, reject, notify)
@@ -197,18 +194,28 @@ Nuo.all = values => {
         reject(e)
       }
     }
-    for (let i = 0; i < values.length; i++) {
+    for (let i = 0, len = values.length; i < len; i++) {
       res(i, values[i])
     }
   })
 }
 
-Nuo.race = values => {
-  return new Nuo((resolve, reject, notify) => {
-    for (let i = 0, len = values.length; i < len; i++) {
-      Nuo.resolve(values[i]).then(resolve, reject, notify)
-    }
-  })
+Nuo.race = values => new Nuo((resolve, reject, notify) => {
+  for (let i = 0, len = values.length; i < len; i++) {
+    Nuo.resolve(values[i]).then(resolve, reject, notify)
+  }
+})
+
+function isNuo (val) {
+  return val instanceof Nuo
+}
+
+function isObject (val) {
+  return typeof val === 'object'
+}
+
+function isFunction (val) {
+  return typeof val === 'function'
 }
 
 export default Nuo
