@@ -11,6 +11,26 @@ var banner =
   ' * Released under the MIT License.\n' +
   ' */'
 
+// es
+rollup.rollup({
+  input: 'src/index.js',
+  plugins: [
+    buble()
+  ]
+})
+.then(function (bundle) {
+  return bundle.generate({
+    format: 'es',
+    banner
+  })
+})
+.then(function ({ code }) {
+  return write('es/index.js', code).then(function () {
+    return code
+  })
+})
+.catch(logError)
+
 // cjs
 rollup.rollup({
   input: 'src/index.js',

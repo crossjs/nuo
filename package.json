@@ -1,12 +1,12 @@
 {
   "name": "nuo",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": ":two_hearts: Lightweight promise polyfill. A+ compliant. Implements notify, progress, and finally.",
   "main": "dist/index.js",
-  "module": "src/index.js",
+  "module": "es/index.js",
   "files": [
-    "src",
-    "dist"
+    "dist",
+    "es"
   ],
   "scripts": {
     "build": "node --harmony ./cli/build",
