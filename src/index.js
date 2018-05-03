@@ -1,4 +1,4 @@
-const setImmediate = require('core-js/library/fn/set-immediate')
+import setImmediate from 'core-js/library/fn/set-immediate'
 
 function Nuo (fn) {
   if (!isNuo(this)) throw new TypeError('Promises must be constructed via new')
@@ -36,16 +36,14 @@ function handle (deferred) {
     const cb = this._s ? deferred.onFulfilled : deferred.onRejected
     if (cb === null) {
       (this._s ? deferred.resolve : deferred.reject)(this._v)
-      return
+    } else {
+      try {
+        const ret = cb(this._v)
+        deferred.resolve(ret)
+      } catch (e) {
+        deferred.reject(e)
+      }
     }
-    let ret
-    try {
-      ret = cb(this._v)
-    } catch (e) {
-      deferred.reject(e)
-      return
-    }
-    deferred.resolve(ret)
   })
 }
 
@@ -90,11 +88,11 @@ function notify (progress) {
   finale.call(this, true)
 }
 
-function finale (keep) {
+function finale (keepDeferred) {
   for (let i = 0, d = this._d, len = d.length; i < len; i++) {
     handle.call(this, d[i])
   }
-  if (!keep) {
+  if (!keepDeferred) {
     this._d = null
   }
 }
@@ -158,13 +156,7 @@ Nuo.prototype.then = function (onFulfilled, onRejected, onProgress) {
   })
 }
 
-Nuo.resolve = value => {
-  if (value && isNuo(value)) {
-    return value
-  }
-
-  return new Nuo(resolve => resolve(value))
-}
+Nuo.resolve = value => isNuo(value) ? value : new Nuo(resolve => resolve(value))
 
 Nuo.reject = value => new Nuo((resolve, reject) => reject(value))
 
@@ -194,17 +186,53 @@ Nuo.all = values => {
         reject(e)
       }
     }
-    for (let i = 0, len = values.length; i < len; i++) {
+    // 各数组项都会被执行到，
+    // 即时中途出现被拒绝项。
+    for (let i = 0, len = remaining; i < len; i++) {
       res(i, values[i])
     }
   })
 }
 
 Nuo.race = values => new Nuo((resolve, reject, notify) => {
+  // 各数组项都会被执行到，
+  // 即时中途出现被拒绝项。
   for (let i = 0, len = values.length; i < len; i++) {
     Nuo.resolve(values[i]).then(resolve, reject, notify)
   }
 })
+
+Nuo.any = values => {
+  return new Nuo((resolve, reject, notify) => {
+    if (values.length === 0) return reject()
+    let remaining = values.length
+
+    function res (i, val) {
+      try {
+        if (val && (isObject(val) || isFunction(val))) {
+          const then = val.then
+          if (isFunction(then)) {
+            then.call(val, val => {
+              res(i, val)
+            }, reject, notify)
+            return
+          }
+        }
+        resolve(val)
+      } catch (e) {
+        reject(e)
+      }
+      if (--remaining === 0) {
+        reject()
+      }
+    }
+    // 各数组项都会被执行到，
+    // 即时中途出现被拒绝项。
+    for (let i = 0, len = remaining; i < len; i++) {
+      res(i, values[i])
+    }
+  })
+}
 
 function isNuo (val) {
   return val instanceof Nuo

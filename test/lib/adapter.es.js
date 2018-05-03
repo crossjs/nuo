@@ -1,9 +1,8 @@
-import tests from 'promises-aplus-tests'
-import Promise from '../src'
+import Promise from '../../es'
 
-tests.mocha({
+global.adapter = {
   resolved: Promise.resolve,
-  rejected: Promise.rejected,
+  rejected: Promise.reject,
   deferred: () => {
     const obj = {}
     const prom = new Promise((resolve, reject) => {
@@ -13,4 +12,4 @@ tests.mocha({
     obj.promise = prom
     return obj
   }
-})
+}

@@ -20,7 +20,8 @@ then
   mkdir dist
   VERSION=$VERSION npm run build
 
-  # test build
+  # test builds
+  npm run test:es
   npm run test:cjs
 
   # commit

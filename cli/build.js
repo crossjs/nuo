@@ -14,6 +14,9 @@ var banner =
 // es
 rollup.rollup({
   input: 'src/index.js',
+  external: [
+    'core-js/library/fn/set-immediate'
+  ],
   plugins: [
     buble()
   ]
@@ -34,6 +37,9 @@ rollup.rollup({
 // cjs
 rollup.rollup({
   input: 'src/index.js',
+  external: [
+    'core-js/library/fn/set-immediate'
+  ],
   plugins: [
     buble()
   ]

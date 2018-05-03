@@ -1,5 +1,4 @@
 import assert from 'assert'
-import Promise from '../src'
 
 const a = { _id: 'a' }
 const b = { _id: 'b' }
@@ -10,7 +9,7 @@ const B = Promise.resolve(b)
 const C = Promise.resolve(c)
 
 const rejection = { _id: 'rejection' }
-const rejected = new Promise((resolve, reject) => reject(rejection))
+const rejected = Promise.reject(rejection)
 
 describe('Promise.race(...)', () => {
   describe('an array', () => {
