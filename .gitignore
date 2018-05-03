@@ -1,9 +1,5 @@
 .DS_STORE
-.nyc_output
-*.bak
 *.log
-*.old
-*.out
 
 coverage
 dist

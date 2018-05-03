@@ -1,5 +1,7 @@
 import Promise from '../../es'
 
+global.Promise = Promise
+
 global.adapter = {
   resolved: Promise.resolve,
   rejected: Promise.reject,
