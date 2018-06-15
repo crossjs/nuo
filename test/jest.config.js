@@ -1,4 +1,9 @@
 module.exports = {
+  moduleFileExtensions: ['ts', 'js'],
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.tsx?$': 'ts-jest'
+  },
   testRegex: 'test/.*-tests\\.js$',
   setupFiles: ['./adapter.js'],
   setupTestFrameworkScriptFile: './adapter-patch.js',
