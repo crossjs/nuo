@@ -1,5 +1,11 @@
 import { isFunction } from "./utils"
 
+export type notifyFunc = (sofar?: any) => any
+export type PromiseFunc = (
+  resolve: resolveFunc,
+  reject: rejectFunc,
+  notify: notifyFunc) => void
+
 export default class Handler {
   public onFulfilled: resolveFunc | null
   public onRejected: rejectFunc | null
