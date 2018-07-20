@@ -1,6 +1,7 @@
 var fs = require('fs')
 var rollup = require('rollup')
 var uglify = require('uglify-js')
+var flow = require('rollup-plugin-flow')
 var buble = require('rollup-plugin-buble')
 var version = process.env.VERSION || require('../package.json').version
 
@@ -11,29 +12,6 @@ var banner =
   ' * Released under the MIT License.\n' +
   ' */'
 
-// es
-rollup.rollup({
-  input: 'src/index.js',
-  external: [
-    'core-js/library/fn/set-immediate'
-  ],
-  plugins: [
-    buble()
-  ]
-})
-.then(function (bundle) {
-  return bundle.generate({
-    format: 'es',
-    banner
-  })
-})
-.then(function ({ code }) {
-  return write('es/index.js', code).then(function () {
-    return code
-  })
-})
-.catch(logError)
-
 // cjs
 rollup.rollup({
   input: 'src/index.js',
@@ -41,6 +19,7 @@ rollup.rollup({
     'core-js/library/fn/set-immediate'
   ],
   plugins: [
+    flow(),
     buble()
   ]
 })
@@ -51,7 +30,7 @@ rollup.rollup({
   })
 })
 .then(function ({ code }) {
-  return write('dist/index.js', code).then(function () {
+  return write('lib/index.js', code).then(function () {
     return code
   })
 })
@@ -61,7 +40,7 @@ rollup.rollup({
       ascii_only: true
     }
   }).code
-  return write('dist/index.min.js', minified)
+  return write('lib/index.min.js', minified)
 })
 .catch(logError)
 

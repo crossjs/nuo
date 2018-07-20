@@ -1,4 +1,4 @@
-import Promise from '../../src'
+import Promise from '../lib'
 
 global.Promise = Promise
 

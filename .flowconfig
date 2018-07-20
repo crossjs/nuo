@@ -1,0 +1,14 @@
+[ignore]
+.*/coverage/.*
+.*/dist/.*
+.*/es/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]

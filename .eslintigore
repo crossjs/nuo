@@ -1,6 +1,4 @@
 coverage
 dist
+es
 node_modules
-
-index.js
-index.min.js

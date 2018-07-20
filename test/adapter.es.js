@@ -1,4 +1,4 @@
-import Promise from '../../es'
+import Promise from '../es'
 
 global.Promise = Promise
 
