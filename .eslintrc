@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "extends": [
+    "plato",
+    "plugin:flowtype/recommended"
+  ],
+  "plugins": [
+    "flowtype"
+  ]
+}

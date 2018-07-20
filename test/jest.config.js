@@ -1,12 +1,9 @@
 module.exports = {
-  moduleFileExtensions: ['ts', 'js'],
-  transform: {
-    '^.+\\.jsx?$': 'babel-jest',
-    '^.+\\.tsx?$': 'ts-jest'
-  },
+  rootDir: '../',
   testRegex: 'test/.*-tests\\.js$',
-  setupFiles: ['./adapter.js'],
-  setupTestFrameworkScriptFile: './adapter-patch.js',
-  collectCoverage: process.env.npm_lifecycle_event !== 'dev',
-  verbose: process.env.npm_lifecycle_event === 'dev'
+  setupFiles: ['./test/adapter.js'],
+  setupTestFrameworkScriptFile: './test/adapter-patch.js',
+  collectCoverage: process.env.npm_lifecycle_event !== 'start',
+  collectCoverageFrom: ['**/src/*.js'],
+  verbose: process.env.npm_lifecycle_event === 'start'
 }
